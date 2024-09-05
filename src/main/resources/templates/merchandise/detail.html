@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("#btnDelete").click(function(e){
+                if( !confirm("정말로 삭제할까요?") ){
+                    e.preventDefault();
+                }
+
+            });
+        });
+    </script>
+    <title>Title</title>
+</head>
+<body>
+상품번호 : <span th:text="${m.num}"></span><br>
+        상품명 : <span th:text="${m.name}"></span><br>
+    가격 : <span th:text="${m.price}"></span><br>
+    수량 : <span th:text="${m.amount}"></span><br>
+    상품이미지 : <span th:text="${m.fname}"></span><br>
+    이미지크기 : <span th:text="${m.fsize}"></span><br>
+<a th:href="@{/merchandise/update(num=${m.num})}">수정</a>
+<a id="btnDelete" th:href="@{/merchandise/delete(num=${m.num})}">삭제</a>
+</body>
+</html>

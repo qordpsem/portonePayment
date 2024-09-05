@@ -18,11 +18,14 @@
     </tr>
     <tr th:each="m:${list}">
         <td th:text="${m.num}"></td>
-        <td th:text="${m.name}"></td>
+        <td><a th:href="@{/merchandise/detail(num=${m.num})}">
+            <span th:text="${m.name}"></span>
+        </a></td>
         <td th:text="${m.price}"></td>
         <td th:text="${m.amount}"></td>
         <td th:text="${m.fname}"></td>
     </tr>
 </table>
+<a href="/merchandise/insert">상품추가</a>
 </body>
 </html>
