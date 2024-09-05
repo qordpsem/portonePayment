@@ -28,7 +28,7 @@ public class SecurityConfig {
                 )
                 .formLogin(login -> login
                         .loginPage("/signIn").permitAll()
-                        .defaultSuccessUrl("/merchandiseList")
+                        .defaultSuccessUrl("/merchandise/list")
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/signOut"))
