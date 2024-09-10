@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <script type="text/javascript">
         $(function(){
             $("#btnDelete").click(function(e){
@@ -10,6 +11,38 @@
                     e.preventDefault();
                 }
 
+            });
+        });
+        $(function(){
+            $("#btnPay").click(function(){
+                IMP.init("");
+                IMP.request_pay(
+                    {
+                        pg: "kcp",
+                        pay_method: "card",
+                        merchant_uid: `payment-${crypto.randomUUID()}`, // 주문 고유 번호
+                        name: "[[${m.name}]]",
+                        amount: "[[${m.price}]]",
+                        buyer_email: "[[${session.loginUSER.email}]]",
+                        buyer_name:"[[${session.loginUSER.email}]]",
+                        buyer_tel: "[[${session.loginUSER.email}]]",
+                        buyer_addr: "[[${session.loginUSER.email}]]",
+                        buyer_postcode: "[[${session.loginUSER.email}]]",
+                    },
+                    function (res) {
+                        console.log(res);
+                        if(res.success){
+                            $("#imp_uid").val(res.imp_uid);
+                            $("#merchant_uid").val(res.merchant_uid);
+                            $("#paid_amount").val(res.paid_amount);
+                            $("#apply_num").val(res.apply_num);
+                            $("#pay").submit();
+                        }else{
+                            alert("결제 실패");
+                            console.log(res.error_msg);
+                        }
+                    },
+                );
             });
         });
     </script>
@@ -22,6 +55,20 @@
     수량 : <span th:text="${m.amount}"></span><br>
     상품이미지 : <span th:text="${m.fname}"></span><br>
     이미지크기 : <span th:text="${m.fsize}"></span><br>
+<hr>
+<button id="btnPay">주문하기</button>
+<form action="/payok" method="post" id="pay">
+    <input type="text" name="imp_uid" id="imp_uid">
+    <input type="text" name="merchant_uid" id="merchant_uid">
+    <input type="text" name="paid_amount" id="paid_amount">
+    <input type="text" name="apply_num" id="apply_num">
+    <input type="text" name="buyer_email" id="buyer_email" th:value="${session.loginUSER.email}">
+    <input type="text" name="buyer_name" id="buyer_name" th:value="${session.loginUSER.name}">
+    <input type="text" name="buyer_tel" id="buyer_tel" th:value="${session.loginUSER.phone}">
+    <input type="text" name="buyer_addr" id="buyer_addr" th:value="${session.loginUSER.address}">
+    <input type="text" name="buyer_postcode" id="buyer_postcode" th:value="${session.loginUSER.postcode}">
+</form>
+<hr>
 <a th:href="@{/merchandise/update(num=${m.num})}">수정</a>
 <a id="btnDelete" th:href="@{/merchandise/delete(num=${m.num})}">삭제</a>
 </body>
